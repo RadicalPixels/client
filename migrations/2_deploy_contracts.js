@@ -1,5 +1,5 @@
-var Election = artifacts.require("./Election.sol");
+var Radical = artifacts.require("./Radical.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Election);
+  deployer.deploy(Radical);
 };

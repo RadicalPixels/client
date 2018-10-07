@@ -14,14 +14,22 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
-    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^4.0.0",
     "css-loader": "^0.28.10",
+    "file-loader": "^2.0.0",
     "i": "^0.3.6",
+    "image-webpack-loader": "^4.3.1",
     "json-loader": "^0.5.7",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -32,5 +40,11 @@
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.9",
     "webpack-dev-server": "^3.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "react-color": "^2.14.1",
+    "react-hexagon-grid": "^1.0.1",
+    "styled-components": "^3.4.9"
   }
 }
