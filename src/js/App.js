@@ -94,7 +94,7 @@ class App extends React.Component {
     let contentData = "";
 
     for (let i = 0; i ++; i < 9){
-      contentData += this.state.pixels[this.state.selectedPixelIndex].color.substring(1);
+      contentData += this.state.pixels[this.state.selectedPixelIndex].colors[i].color.substring(1);
     }
 
     console.log(contentData);
@@ -117,7 +117,7 @@ class App extends React.Component {
     let contentData = "";
 
     for (let i = 0; i ++; i < 9){
-      contentData += this.state.pixels[this.state.selectedPixelIndex].color.toString().substring(1);
+      contentData += this.state.pixels[this.state.selectedPixelIndex].colors[i].color.toString().substring(1);
     }
 
     this.radicalInstance.pixelByCoordinate.call(x, y, (error, result) => {
