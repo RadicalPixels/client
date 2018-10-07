@@ -16,11 +16,13 @@ class PixelMap extends React.Component {
     this.selectionChange = this.selectionChange.bind(this);
   }
   
-  selectionChange(selectedValue) {
+  selectionChange = (selectedValue) => {
+    console.log("pixel map received selection change: " + selectedValue);
     this.props.onSelectionChange(selectedValue);
   }
   
   render() {
+    
 
     const selectedPixelIndex = this.props.selectedpixelindex;
 
@@ -36,7 +38,7 @@ class PixelMap extends React.Component {
                 pixelData = {pixel}
                 owned = {this.props.owner == pixel.owner ? true : false}
                 selected = {i == selectedPixelIndex ? true : false}
-                onClickSelect = {this.selectionChange}>
+                onSelect = {this.selectionChange}>
               </Pixel>
             )
           })}

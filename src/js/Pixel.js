@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import Square from './Square'
 
 const PixelWrapper = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
@@ -33,31 +33,34 @@ class Pixel extends React.Component {
   }
 
   toggleOff(){
-    this.setState({hover: false})
+    if (!this.props.selected){
+       this.setState({hover: false})
+    }
   }
 
 
-  receiveSelection(){
-    this.props.onClickSelect(this.props.index)
+  receiveSelection(newSelection){
+    console.log("received new selection " + newSelection)
+    this.props.onSelect(newSelection)
   }
   
 
   render() {
 
-    console.log(this.props.index, this.state.hover,this.props.selected )
+    //console.log(this.props.index, this.state.hover,this.props.selected )
     return (
         <PixelWrapper style={{
           
           'position': 'absolute', 
-          'left': 60 * this.props.pixelData.x, 
-          'top': 60 * this.props.pixelData.y,
-          '-webkit-box-shadow': (this.state.hover || this.props.selected) ? '0 5px 25px rgba(0,0,0,0.5)' : '0 0px 0px rgba(0,0,0,0)'}}
-          
+          'left': 66 * this.props.pixelData.x, 
+          'top': 66 * this.props.pixelData.y,
+          '-webkit-box-shadow': this.state.hover ? '0 5px 25px rgba(0,0,0,0.5)' : '0 0px 0px rgba(0,0,0,0)',
+          'boder': this.state.owned ? '1px solid red' : '1px solid blue'}}
           onMouseEnter = {() => this.toggleOn()}
 
           onMouseLeave ={() => this.toggleOff()}
           >
-              {/*TODO REFACTOR THIS WITH A MAP and make sure drawing si disabled*/}
+              {/*TODO REFACTOR THIS WITH A MAP and make sure drawing is disabled*/}
               <Square index={this.props.index} color={this.getColor(0)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
               <Square index={this.props.index} color={this.getColor(1)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
               <Square index={this.props.index} color={this.getColor(2)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
@@ -73,17 +76,18 @@ class Pixel extends React.Component {
   }
 
   getColor(index){
-    if (this.props.owned){
-      if ((index % 2) == 0) 
-        return '#aac0d6';
-      else
-        return '##d1dde9';
-    }
-    else if (!this.props.pixelData.colors){
+    if (!this.props.pixelData.colors){
+
       if ((index % 2) == 0)
-        return '#dfdfdf';
-      else
-        return '#f9f9f9';
+        if ((this.props.index % 2) == 0)
+          return '#f9f9f9';
+        else if ((this.props.index % 2) != 0)
+          return '#dfdfdf';
+      else if ((index % 2) == 0)
+        if ((this.props.index % 2) == 0)
+          return '#fdfdfd';
+        else if ((this.props.index % 2) != 0)
+          return '#f9f9f9';
     }
     else{
       return this.props.pixelData.colors[index];

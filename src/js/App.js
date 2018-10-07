@@ -26,11 +26,12 @@ class App extends React.Component {
     this.saveColors = this.saveColors.bind(this)
 
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
-    
   }
 
-  handleSelectionChange(newSelection){
+  handleSelectionChange = (newSelection) => {
+    console.log("state received " + newSelection)
     this.setState({selectedPixelIndex : newSelection});
+
     
   }
 
@@ -38,16 +39,17 @@ class App extends React.Component {
 
     web3.eth.getAccounts((err, accounts) => {
       this.setState({account : accounts[0]})
-      console.log("error " + err + " account " + accounts)
     })
 
     let RadicalPixels = web3.eth.contract(RadicalPixelsAbi);
 
-    console.log(RadicalPixels)
 
-    this.radicalInstance = RadicalPixels.at("0x2d31eB328000e3314243d49a459Ae03127663Ad0");
-   
-    console.log(this.radicalInstance)
+    //this.radicalInstance = RadicalPixels.at("0x2d31eB328000e3314243d49a459Ae03127663Ad0");
+
+    this.radicalInstance = RadicalPixels.at("0xcfbded0bbf3726a056b1d9458308dd338e9eea63");
+    
+
+
     //this.watchEvents();
 
     /*
@@ -130,6 +132,7 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         
@@ -141,7 +144,7 @@ class App extends React.Component {
           'width': '100%',
           'height': '60px',
           'backgroundColor':'white',
-          'box-shadow:': '0 5px 15px rgba(0,0,0,0.3)',
+          'box-shadow:': '0 0px 15px rgba(0,0,0,0.3)',
           '-webkit-box-shadow': '0 5px 15px rgba(0,0,0,0.3)'}}>
           <img src={logo} style={{'width': '40px', 'height': '40px', 'margin': '10px 10px 0px 10px','float':'left'}}/>
           <h2 style={{'margin-top': '10px'}}>Radical Pixels</h2>
@@ -156,9 +159,9 @@ class App extends React.Component {
           'width': '300px',
           'height': '100%',
           'backgroundColor': '#1d2d3c'}}>
-          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Pixel: {this.state.selectedPixelIndex}</h5>
+          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Selected Pixel: {this.state.selectedPixelIndex}</h5>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Owner: {this.state.pixels[this.state.selectedPixelIndex].owner}</h5>
-          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Price: 100TH</h5>
+          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Price: {this.state.pixels[this.state.selectedPixelIndex].price}</h5>
           
           <input class="form-control rounded-0" ref="priceInput" placeholder="0.2 ETH"
            style={{
@@ -169,7 +172,7 @@ class App extends React.Component {
              'height': '40px',
            }}
           />
-
+          
           <button class="btn-success" onClick={this.purchase} style={{
             'position': 'absolute',
             'bottom': '80px',
@@ -216,7 +219,7 @@ class App extends React.Component {
           'right': '300px',
           'overflow': 'scroll'
           }}>
-          <PixelMap pixels = {this.state.pixels} owner={'0x0'} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedPixelIndex}/>
+          <PixelMap pixels = {this.state.pixels} owner={this.state.pixels[this.state.selectedPixelIndex].owner} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedPixelIndex}/>
         </div>
 
       </div>

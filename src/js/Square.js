@@ -5,8 +5,8 @@ import { TwitterPicker } from 'react-color';
 const testColors = ["#00B1E1", "#37BC9B", "#8CC152", "#E9573F", "#F6BB42"];
 
 const Wrapper = styled.div`
-    width: 20px
-    height: 20px
+    width: 22px
+    height: 22px
     border: 0px
     float: left
 `;
@@ -41,7 +41,10 @@ class Square extends React.Component {
   };
 
   handleChangeComplete = (color) => {
+    this.handleClose();
     this.setState({ background: color.hex });
+
+    console.log("square changed color on " + this.props.index)
     this.props.onSelectionChange(this.props.index);
   };
 
@@ -51,10 +54,10 @@ class Square extends React.Component {
         <div>
             <Wrapper onClick={ this.handleClick } style={{backgroundColor: this.state.background}}></Wrapper>
             {this.state.displayColorPicker ? <div style={ popover }>
-            <div style={ cover } onClick={ this.handleClose }/>
+            <div style={ cover } onClick={this.handleClose}/>
             <TwitterPicker
                 color={ this.props.background }
-                onChangeComplete={ this.handleChangeComplete }
+                onChange={ this.handleChangeComplete }
             />
             </div> : null }
         </div>
