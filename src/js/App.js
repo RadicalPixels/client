@@ -23,14 +23,15 @@ class App extends React.Component {
     }
 
     this.purchase = this.purchase.bind(this)
+    this.saveColors = this.saveColors.bind(this)
 
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
     
-
   }
 
   handleSelectionChange(newSelection){
     this.setState({selectedPixelIndex : newSelection});
+    
   }
 
   componentDidMount() {
@@ -48,6 +49,19 @@ class App extends React.Component {
    
     console.log(this.radicalInstance)
     //this.watchEvents();
+
+    /*
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+         console.log(xhttp.responseText);
+      }
+    };
+    
+
+    xhttp.open("GET", 'http://radicalpixels.io:8000/grid', true);
+    xhttp.send();
+    */
   }
 
   watchEvents() {
@@ -59,6 +73,27 @@ class App extends React.Component {
     })
   }
 
+  async saveColors(){
+    const x = this.state.pixels[this.state.selectedPixelIndex].x;
+    const y = this.state.pixels[this.state.selectedPixelIndex].y;
+
+    this.setState({ buying: true });
+
+    let contentData = "";
+    
+    for (let i = 0; i ++; i < 9){
+      contentData += this.state.pixels[this.state.selectedPixelIndex].color.substring(1);
+    }
+    
+    console.log(contentData);
+
+    this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
+      this.radicalInstance.changeContentData(x, y, contentData, (result) => {
+        this.setState({ purchased: true })
+      })
+    });
+    
+  }
 
   async purchase() {
 
@@ -66,24 +101,32 @@ class App extends React.Component {
     const y = this.state.pixels[this.state.selectedPixelIndex].y;
 
     this.setState({ buying: true });
-    console.log(this.radicalInstance);
+    
+    let contentData = "";
+    
+    for (let i = 0; i ++; i < 9){
+      contentData += this.state.pixels[this.state.selectedPixelIndex].color.toString().substring(1);
+    }
+
     this.radicalInstance.pixelByCoordinate.call(x, y, (error, result) => {
-      console.log(error, result);
+      
+      if ((result[1] == undefined) || (parseInt(result[1], 16) == 0)){
+        //uninitialized
+        this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
+          this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.1, "ether"), contentData, (result) => {
+            this.setState({ purchased: true })
+          })
+        })
+      }
+      else{
+        //initialized
+        this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
+          this.radicalInstance.buyPixelBlock(x, y,  web3.toWei(0.1, "ether"), contentData, (result) => {
+            this.setState({ purchased: true })
+          })
+        })
+      }
     });
-
-
-    this.radicalInstance.addFunds({value : web3.toWei(0.1, "ether")}, (error, result) => {
-      console.log(error, result)
-      this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.1, "ether"), "ecececfbfbfb0000005e5e5e9999996f6f6fe3e3e3ffffffb5b5b5", (result) => {
-        this.setState({ purchased: true })
-      })
-    })
-
-    /*
-    this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.1, "ether"), "ecececfbfbfb0000005e5e5e9999996f6f6fe3e3e3ffffffb5b5b5", (result) => {
-      this.setState({ purchased: true })
-    })
-    */
   }
 
   render() {
@@ -117,7 +160,7 @@ class App extends React.Component {
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Owner: {this.state.pixels[this.state.selectedPixelIndex].owner}</h5>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Price: 100TH</h5>
           
-          <input class="form-control rounded-0" id="inputPassword2" placeholder="0.2 ETH"
+          <input class="form-control rounded-0" ref="priceInput" placeholder="0.2 ETH"
            style={{
              'position': 'absolute',
              'bottom': '140px',
@@ -131,11 +174,22 @@ class App extends React.Component {
             'position': 'absolute',
             'bottom': '80px',
             'left': '20px',
-            'width': '270px',
+            'width': '170px',
             'height': '40px',
             'cursor': 'pointer',
             'enabled': false
           }}>PURCHASE PIXEL</button>
+
+          <button class="btn-success" onClick={this.saveColors} style={{
+            'position': 'absolute',
+            'bottom': '80px',
+            'left': '200px',
+            'width': '89px',
+            'height': '40px',
+            'cursor': 'pointer',
+            'enabled': false
+          }}>SAVE</button>
+
         </div>
 
 
@@ -162,7 +216,7 @@ class App extends React.Component {
           'right': '300px',
           'overflow': 'scroll'
           }}>
-          <PixelMap pixels = {this.state.pixels} owner={'0x0'} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedpixel}/>
+          <PixelMap pixels = {this.state.pixels} owner={'0x0'} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedPixelIndex}/>
         </div>
 
       </div>

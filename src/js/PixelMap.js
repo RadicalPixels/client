@@ -28,9 +28,11 @@ class PixelMap extends React.Component {
         <MapWrapper>
           
           {this.props.pixels.map((pixel, i) => {
+            
             return(
               <Pixel 
                 index = {i}
+                key = {i}
                 pixelData = {pixel}
                 owned = {this.props.owner == pixel.owner ? true : false}
                 selected = {i == selectedPixelIndex ? true : false}
