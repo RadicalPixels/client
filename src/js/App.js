@@ -5,7 +5,7 @@ import RadicalPixelsAbi from '../../build/contracts/RadicalPixels.json'
 import 'bootstrap/dist/css/bootstrap.css'
 import PixelMap from './PixelMap';
 import logo from '../../assets/logo.jpg';
-import ipfs from '../../assets/ipfs.json';
+//import ipfs from '../../assets/ipfs.json';
 
 require('babel-polyfill')
 require('babel-register')
@@ -15,7 +15,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       account: '0x0',
-      pixels: ipfs,
+      pixels: [],
       purchased: false,
       loading: true,
       buying: false,
@@ -26,12 +26,21 @@ class App extends React.Component {
     this.saveColors = this.saveColors.bind(this)
 
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
-    
+    this.updateData()
+  }
+
+  async updateData() {
+    const resp = await fetch('http://radicalpixels.io:8000/grid')
+    const json = await resp.json()
+
+    this.setState({
+      pixels: json
+    })
   }
 
   handleSelectionChange(newSelection){
     this.setState({selectedPixelIndex : newSelection});
-    
+
   }
 
   componentDidMount() {
@@ -46,7 +55,7 @@ class App extends React.Component {
     console.log(RadicalPixels)
 
     this.radicalInstance = RadicalPixels.at("0x2d31eB328000e3314243d49a459Ae03127663Ad0");
-   
+
     console.log(this.radicalInstance)
     //this.watchEvents();
 
@@ -57,7 +66,7 @@ class App extends React.Component {
          console.log(xhttp.responseText);
       }
     };
-    
+
 
     xhttp.open("GET", 'http://radicalpixels.io:8000/grid', true);
     xhttp.send();
@@ -80,11 +89,11 @@ class App extends React.Component {
     this.setState({ buying: true });
 
     let contentData = "";
-    
+
     for (let i = 0; i ++; i < 9){
       contentData += this.state.pixels[this.state.selectedPixelIndex].color.substring(1);
     }
-    
+
     console.log(contentData);
 
     this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
@@ -92,7 +101,7 @@ class App extends React.Component {
         this.setState({ purchased: true })
       })
     });
-    
+
   }
 
   async purchase() {
@@ -101,15 +110,15 @@ class App extends React.Component {
     const y = this.state.pixels[this.state.selectedPixelIndex].y;
 
     this.setState({ buying: true });
-    
+
     let contentData = "";
-    
+
     for (let i = 0; i ++; i < 9){
       contentData += this.state.pixels[this.state.selectedPixelIndex].color.toString().substring(1);
     }
 
     this.radicalInstance.pixelByCoordinate.call(x, y, (error, result) => {
-      
+
       if ((result[1] == undefined) || (parseInt(result[1], 16) == 0)){
         //uninitialized
         this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
@@ -132,7 +141,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        
+
         <div style={{
           'position': 'fixed',
           'z-index': '100',
@@ -147,19 +156,18 @@ class App extends React.Component {
           <h2 style={{'margin-top': '10px'}}>Radical Pixels</h2>
         </div>
 
-       
+
         <div style={{
-          'position': 'fixed', 
+          'position': 'fixed',
           'z-index': '-1',
-          'top': '60px', 
+          'top': '60px',
           'right': '0px',
           'width': '300px',
           'height': '100%',
           'backgroundColor': '#1d2d3c'}}>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Pixel: {this.state.selectedPixelIndex}</h5>
-          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Owner: {this.state.pixels[this.state.selectedPixelIndex].owner}</h5>
+          <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Owner: {this.state.pixels.length ? this.state.pixels[this.state.selectedPixelIndex].owner : ''}</h5>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Price: 100TH</h5>
-          
           <input class="form-control rounded-0" ref="priceInput" placeholder="0.2 ETH"
            style={{
              'position': 'absolute',
@@ -201,7 +209,7 @@ class App extends React.Component {
               hasVoted={this.state.hasVoted}
               castVote={this.castVote} />
         */}
-          
+
         {/*
         <div class='row' style={{'margin-left': '10px'}}>
           <PixelMap pixels = {this.state.pixels}/>
@@ -209,7 +217,7 @@ class App extends React.Component {
         */}
 
         <div style={{
-          'position': 'fixed', 
+          'position': 'fixed',
           'top': '60px',
           'left': '0px',
           'bottom': '0px',
