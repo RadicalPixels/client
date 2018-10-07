@@ -41,7 +41,7 @@ class Pixel extends React.Component {
           'position': 'absolute', 
           'left': 60 * this.props.pixelData.x, 
           'top': 60 * this.props.pixelData.y,
-          '-webkit-box-shadow': (this.state.hover || this.props.selected) ? '0 5px 15px rgba(0,0,0,0.3)' : '0 0px 0px rgba(0,0,0,0)'}}
+          '-webkit-box-shadow': (this.state.hover || this.props.selected) ? '0 5px 25px rgba(0,0,0,0.5)' : '0 0px 0px rgba(0,0,0,0)'}}
           
           onMouseEnter={this.toggleHover} 
           onMouseLeave={this.toggleHover}
@@ -69,7 +69,7 @@ class Pixel extends React.Component {
         return '##d1dde9';
     }
     else if (!this.props.pixelData.colors){
-      if ((index % 2) == 0) 
+      if ((index % 2) == 0)
         return '#dfdfdf';
       else
         return '#f9f9f9';

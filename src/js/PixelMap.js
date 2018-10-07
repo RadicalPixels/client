@@ -22,7 +22,7 @@ class PixelMap extends React.Component {
   
   render() {
 
-    const selectedPixel = this.props.selectedpixel;
+    const selectedPixelIndex = this.props.selectedpixelindex;
 
     return (
         <MapWrapper>
@@ -33,7 +33,7 @@ class PixelMap extends React.Component {
                 index = {i}
                 pixelData = {pixel}
                 owned = {this.props.owner == pixel.owner ? true : false}
-                selected = {pixel.id == selectedPixel ? true : false}
+                selected = {i == selectedPixelIndex ? true : false}
                 onClickSelect = {this.selectionChange}>
               </Pixel>
             )
