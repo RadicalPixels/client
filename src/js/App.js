@@ -30,7 +30,8 @@ class App extends React.Component {
   }
 
   async updateData() {
-    const resp = await fetch('http://radicalpixels.io:8000/grid')
+    const resp = await fetch('http://localhost:8000/grid')
+			//const resp = await fetch('http://radicalpixels.io:8000/grid')
     const json = await resp.json()
 
     this.setState({
@@ -112,31 +113,46 @@ class App extends React.Component {
     const x = this.state.pixels[this.state.selectedPixelIndex].x;
     const y = this.state.pixels[this.state.selectedPixelIndex].y;
 
+		console.log(x, y)
+
     this.setState({ buying: true });
 
     let contentData = "";
+
+		console.log('color', this.state.pixels[this.state.selectedPixelIndex].color)
 
     for (let i = 0; i ++; i < 9){
       contentData += this.state.pixels[this.state.selectedPixelIndex].color.toString().substring(1);
     }
 
+		console.log('content data:', contentData)
+
     this.radicalInstance.pixelByCoordinate.call(x, y, (error, result) => {
 
       if ((result[1] == undefined) || (parseInt(result[1], 16) == 0)){
         //uninitialized
+				/*
         this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
-          this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.1, "ether"), contentData, (result) => {
+					*/
+          this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.01, "ether"), contentData, (err, result) => {
+						console.log(err, result)
             this.setState({ purchased: true })
           })
+					/*
         })
+					*/
       }
       else{
         //initialized
+				/*
         this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
-          this.radicalInstance.buyPixelBlock(x, y,  web3.toWei(0.1, "ether"), contentData, (result) => {
+				*/
+          this.radicalInstance.buyPixelBlock(x, y,  web3.toWei(0.01, "ether"), contentData, (err, result) => {
             this.setState({ purchased: true })
           })
+				/*
         })
+				*/
       }
     });
   }
