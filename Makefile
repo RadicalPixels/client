@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	@npm run build && mkdir -p public && cp src/index.html public/ && cp dist/* public
+	@npm run build && mkdir -p public && cp src/index.html public/ && cp -r dist/* public
 
 .PHONY: build/docker
 build/docker:
