@@ -42,7 +42,7 @@ class App extends React.Component {
     console.log("state received " + newSelection)
     this.setState({selectedPixelIndex : newSelection});
 
-    
+
   }
 
   componentDidMount() {
@@ -57,7 +57,7 @@ class App extends React.Component {
     //this.radicalInstance = RadicalPixels.at("0x2d31eB328000e3314243d49a459Ae03127663Ad0");
 
     this.radicalInstance = RadicalPixels.at("0xcfbded0bbf3726a056b1d9458308dd338e9eea63");
-    
+
 
 
     //this.watchEvents();
@@ -172,7 +172,7 @@ class App extends React.Component {
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Selected Pixel: {this.state.selectedPixelIndex}</h5>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Owner: {this.state.pixels.length ? this.state.pixels[this.state.selectedPixelIndex].owner : ''}</h5>
           <h5 style={{'color':'white', 'margin-top': '10px', 'margin-left': '10px'}}>Price: {this.state.pixels.length ? this.state.pixels[this.state.selectedPixelIndex].price : ''}</h5>
-          
+
           <input class="form-control rounded-0" ref="priceInput" placeholder="0.2 ETH"
            style={{
              'position': 'absolute',
@@ -182,7 +182,7 @@ class App extends React.Component {
              'height': '40px',
            }}
           />
-          
+
           <button class="btn-success" onClick={this.purchase} style={{
             'position': 'absolute',
             'bottom': '80px',
@@ -229,7 +229,7 @@ class App extends React.Component {
           'right': '300px',
           'overflow': 'scroll'
           }}>
-          <PixelMap pixels = {this.state.pixels} owner={this.state.pixels[this.state.selectedPixelIndex].owner} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedPixelIndex}/>
+          <PixelMap pixels = {this.state.pixels} owner={this.state.pixels.length ? this.state.pixels[this.state.selectedPixelIndex].owner : ''} onSelectionChange={this.handleSelectionChange} selectedpixelindex = {this.state.selectedPixelIndex}/>
         </div>
 
       </div>
