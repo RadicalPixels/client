@@ -45,7 +45,7 @@ class Square extends React.Component {
     this.setState({ background: color.hex });
 
     console.log("square changed color on " + this.props.index)
-    this.props.onSelectionChange(this.props.index);
+    this.props.onSelectionChange(this.props.index, this.props.position, color.hex);
   };
 
   render() {
