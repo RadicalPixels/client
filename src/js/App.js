@@ -30,8 +30,8 @@ class App extends React.Component {
   }
 
   async updateData() {
-    const resp = await fetch('http://localhost:8000/grid')
-			//const resp = await fetch('http://radicalpixels.io:8000/grid')
+    //const resp = await fetch('http://localhost:8000/grid')
+		const resp = await fetch('http://radicalpixels.io:8000/grid')
     const json = await resp.json()
 
     this.setState({
@@ -39,11 +39,19 @@ class App extends React.Component {
     })
   }
 
-  handleSelectionChange = (newSelection) => {
-    console.log("state received " + newSelection)
+  handleSelectionChange = (newSelection, position, color) => {
     this.setState({selectedPixelIndex : newSelection});
 
+    console.log(newSelection);
+    let tempArray = [];
 
+    if (!this.state.pixels[newSelection].colors){
+      this.state.pixels[newSelection].colors = [];
+    }
+    console.log(this.state.pixels[newSelection].colors);
+    this.state.pixels[newSelection].colors[position] = color;
+    console.log("app level new color " + color );
+    this.forceUpdate();
   }
 
   componentDidMount() {
@@ -86,6 +94,12 @@ class App extends React.Component {
     })
   }
 
+  colorUpdate = (position, color) => {
+    this.state.pixels[this.state.selectedPixelIndex].colors[position] = color;
+  }
+
+
+
   async saveColors(){
     const x = this.state.pixels[this.state.selectedPixelIndex].x;
     const y = this.state.pixels[this.state.selectedPixelIndex].y;
@@ -94,6 +108,7 @@ class App extends React.Component {
 
     let contentData = "";
 
+    console.log()
     for (let i = 0; i ++; i < 9){
       contentData += this.state.pixels[this.state.selectedPixelIndex].colors[i].color.substring(1);
     }
@@ -119,11 +134,16 @@ class App extends React.Component {
 
     let contentData = "";
 
-		console.log('color', this.state.pixels[this.state.selectedPixelIndex].color)
+		console.log('color', this.state.pixels[this.state.selectedPixelIndex].colors)
 
-    for (let i = 0; i ++; i < 9){
-      contentData += this.state.pixels[this.state.selectedPixelIndex].colors[i].color.toString().substring(1);
+    var colors = this.state.pixels[this.state.selectedPixelIndex].colors.slice(0)
+    for (let i = 0; i < 9; i++){
+      if (!colors[i]) {
+        colors[i] = '#ffffff'
+      }
     }
+
+    contentData = colors.map(x => x.replace('#', '')).join('')
 
 		console.log('content data:', contentData)
 
@@ -133,8 +153,9 @@ class App extends React.Component {
         //uninitialized
 				/*
         this.radicalInstance.addFunds({value : web3.toWei(this.refs.priceInput.value, "ether")}, (error, result) => {
-					*/
-          this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.01, "ether"), contentData, (err, result) => {
+          */
+          console.log(web3.fromAscii(contentData));
+          this.radicalInstance.buyUninitializedPixelBlock(x, y,  web3.toWei(0.01, "ether"), "0x"+contentData, (err, result) => {
 						console.log(err, result)
             this.setState({ purchased: true })
           })

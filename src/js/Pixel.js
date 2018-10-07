@@ -39,11 +39,10 @@ class Pixel extends React.Component {
   }
 
 
-  receiveSelection(newSelection){
+  receiveSelection(newSelection, position, color){
     console.log("received new selection " + newSelection)
-    this.props.onSelect(newSelection)
+    this.props.onSelect(newSelection, position, color)
   }
-  
 
   render() {
 
@@ -61,16 +60,15 @@ class Pixel extends React.Component {
           onMouseLeave ={() => this.toggleOff()}
           >
               {/*TODO REFACTOR THIS WITH A MAP and make sure drawing is disabled*/}
-              <Square index={this.props.index} color={this.getColor(0)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(1)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(2)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(3)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(4)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(5)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(6)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(7)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-              <Square index={this.props.index} color={this.getColor(8)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
-
+              <Square index={this.props.index} position={0} color={this.getColor(0)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={1} color={this.getColor(1)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={2} color={this.getColor(2)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={3} color={this.getColor(3)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={4} color={this.getColor(4)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={5} color={this.getColor(5)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={6} color={this.getColor(6)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={7} color={this.getColor(7)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
+              <Square index={this.props.index} position={8} color={this.getColor(8)} onSelectionChange={this.receiveSelection} drawingAllowed = {true}/>
         </PixelWrapper>
     )
   }
